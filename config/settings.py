@@ -28,6 +28,10 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'gestcar-pro-production.up.railway.app',
+]
+
 
 # Application definition
 
