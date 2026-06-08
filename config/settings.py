@@ -26,12 +26,14 @@ SECRET_KEY = 'django-insecure-_nqmmlv@d7d(wq(vt+w6c__k-kjr7&=297h5indod+*s3vg6i3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
-
-CSRF_TRUSTED_ORIGINS = [
+ALLOWED_HOSTS = [
     'gestcar-pro-production.up.railway.app',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://gestcar-pro-production.up.railway.app',
+]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
