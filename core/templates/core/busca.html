@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Busca{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Resultados para: "{{ query }}"</h3>
+
+<h5>Clientes</h5>
+
+<table class="table table-striped">
+
+<tr>
+<th>Nome</th>
+<th>Telefone</th>
+<th>Email</th>
+</tr>
+
+{% for c in clientes %}
+
+<tr>
+<td>{{ c.nome }}</td>
+<td>{{ c.telefone }}</td>
+<td>{{ c.email }}</td>
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="3">Nenhum cliente encontrado</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<h5 class="mt-4">Veículos</h5>
+
+<table class="table table-striped">
+
+<tr>
+<th>Cliente</th>
+<th>Marca</th>
+<th>Modelo</th>
+<th>Placa</th>
+</tr>
+
+{% for v in veiculos %}
+
+<tr>
+<td>{{ v.cliente }}</td>
+<td>{{ v.marca }}</td>
+<td>{{ v.modelo }}</td>
+<td>{{ v.placa }}</td>
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4">Nenhum veículo encontrado</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

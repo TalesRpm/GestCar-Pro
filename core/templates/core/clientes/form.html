@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+             style="background:#111827;">
+
+            <div class="card-body p-5">
+
+                <!-- TOPO -->
+
+                <div class="mb-4">
+
+                    <h2 class="fw-bold text-light mb-1">
+
+                        Cadastrar Cliente
+
+                    </h2>
+
+                    <p class="text-secondary mb-0">
+
+                        Preencha as informações do cliente
+
+                    </p>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    {% for field in form %}
+
+                    <div class="mb-4">
+
+                        <label class="form-label text-light fw-semibold">
+
+                            {{ field.label }}
+
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.errors %}
+
+                        <div class="text-danger small mt-2">
+
+                            {{ field.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endfor %}
+
+
+                    <!-- BOTOES -->
+
+                    <div class="d-flex gap-3 mt-5">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4 py-2 rounded-3">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            Salvar Cliente
+
+                        </button>
+
+                        <a href="{% url 'listar_clientes' %}"
+                           class="btn btn-outline-light px-4 py-2 rounded-3">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

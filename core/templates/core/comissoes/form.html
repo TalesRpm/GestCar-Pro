@@ -1,0 +1,194 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Nova Comissão{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-10">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+             style="background:#111827;">
+
+            <div class="card-body p-5">
+
+                <!-- TOPO -->
+
+                <div class="mb-5">
+
+                    <h2 class="fw-bold text-light mb-1">
+
+                        Cadastrar Comissão
+
+                    </h2>
+
+                    <p class="text-secondary mb-0">
+
+                        Preencha as informações da comissão
+
+                    </p>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Cliente
+
+                            </label>
+
+                            {{ form.cliente_nome }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Telefone
+
+                            </label>
+
+                            {{ form.telefone }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Modelo do carro
+
+                            </label>
+
+                            {{ form.modelo_carro }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Placa
+
+                            </label>
+
+                            {{ form.placa }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Categoria
+
+                            </label>
+
+                            {{ form.categoria }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Serviço
+
+                            </label>
+
+                            {{ form.servico }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Valor do serviço
+
+                            </label>
+
+                            {{ form.valor_servico }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Comissão
+
+                            </label>
+
+                            {{ form.comissao }}
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light fw-semibold">
+
+                                Data
+
+                            </label>
+
+                            {{ form.data }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BOTOES -->
+
+                    <div class="d-flex gap-3 mt-5">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4 py-2 rounded-3">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            Salvar Comissão
+
+                        </button>
+
+                        <a href="{% url 'listar_comissoes' %}"
+                           class="btn btn-outline-light px-4 py-2 rounded-3">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

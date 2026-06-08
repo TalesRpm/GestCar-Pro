@@ -1,0 +1,383 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<!-- TOPO -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold text-light mb-1">
+
+            Agendamentos
+
+        </h2>
+
+        <p class="text-secondary mb-0">
+
+            Controle de agendamentos do sistema
+
+        </p>
+
+    </div>
+
+    <a href="{% url 'cadastrar_agendamento' %}"
+       class="btn btn-primary px-4 py-2 rounded-3">
+
+        <i class="bi bi-plus-circle me-2"></i>
+
+        Novo Agendamento
+
+    </a>
+
+</div>
+
+<!-- FILTROS -->
+
+<div class="card border-0 rounded-4 shadow-sm mb-4"
+     style="
+     background:#111827;
+     border:1px solid rgba(255,255,255,.05);
+     ">
+
+    <div class="card-body p-4">
+
+        <form method="GET">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- BUSCA -->
+
+                <div class="col-lg-4">
+
+                    <label class="form-label text-light">
+
+                        Buscar Cliente
+
+                    </label>
+
+                    <input type="text"
+                           name="busca"
+                           value="{{ request.GET.busca }}"
+                           class="form-control"
+                           placeholder="Nome do cliente">
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-lg-3">
+
+                    <label class="form-label text-light">
+
+                        Status
+
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        <option value="AGENDADO"
+                        {% if request.GET.status == 'AGENDADO' %}
+                        selected
+                        {% endif %}>
+
+                            Agendado
+
+                        </option>
+
+                        <option value="CONCLUIDO"
+                        {% if request.GET.status == 'CONCLUIDO' %}
+                        selected
+                        {% endif %}>
+
+                            Concluído
+
+                        </option>
+
+                        <option value="CANCELADO"
+                        {% if request.GET.status == 'CANCELADO' %}
+                        selected
+                        {% endif %}>
+
+                            Cancelado
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DATA -->
+
+                <div class="col-lg-3">
+
+                    <label class="form-label text-light">
+
+                        Data
+
+                    </label>
+
+                    <input type="date"
+                           name="data"
+                           value="{{ request.GET.data }}"
+                           class="form-control">
+
+                </div>
+
+
+                <!-- BOTOES -->
+
+                <div class="col-lg-2">
+
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-primary w-100">
+
+                            <i class="bi bi-search"></i>
+
+                        </button>
+
+                        <a href="{% url 'listar_agendamentos' %}"
+                           class="btn btn-outline-light">
+
+                            <i class="bi bi-x-lg"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- TABELA -->
+
+<div class="card border-0 rounded-4 shadow-sm"
+     style="
+     background:#111827;
+     border:1px solid rgba(255,255,255,.05);
+     ">
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-dark align-middle mb-0 custom-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Cliente
+                        </th>
+
+                        <th>
+                            Veículo
+                        </th>
+
+                        <th>
+                            Serviço
+                        </th>
+
+                        <th>
+                            Data
+                        </th>
+
+                        <th>
+                            Hora
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th style="width:180px;">
+                            Ações
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for a in agendamentos %}
+
+                    <tr>
+
+                        <!-- CLIENTE -->
+
+                        <td>
+
+                            <div class="fw-semibold text-light">
+
+                                {{ a.cliente.nome }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- VEICULO -->
+
+                        <td>
+
+                            <div class="fw-semibold">
+
+                                {{ a.veiculo.modelo }}
+
+                            </div>
+
+                            <small class="text-secondary">
+
+                                {{ a.veiculo.placa }}
+
+                            </small>
+
+                        </td>
+
+
+                        <!-- SERVICO -->
+
+                        <td>
+
+                            {{ a.servico.nome }}
+
+                        </td>
+
+
+                        <!-- DATA -->
+
+                        <td>
+
+                            {{ a.data }}
+
+                        </td>
+
+
+                        <!-- HORA -->
+
+                        <td>
+
+                            <span class="badge rounded-pill text-bg-dark px-3 py-2">
+
+                                {{ a.hora }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if a.status == "AGENDADO" %}
+
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+
+                                Agendado
+
+                            </span>
+
+                            {% elif a.status == "CONCLUIDO" %}
+
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+
+                                Concluído
+
+                            </span>
+
+                            {% elif a.status == "CANCELADO" %}
+
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">
+
+                                Cancelado
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACOES -->
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <a href="{% url 'editar_agendamento' a.id %}"
+                                   class="btn btn-sm btn-outline-primary rounded-3">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </a>
+
+
+                                {% if a.status == "AGENDADO" %}
+
+                                <a href="{% url 'concluir_agendamento' a.id %}"
+                                   class="btn btn-sm btn-outline-success rounded-3">
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                </a>
+
+                                <a href="{% url 'cancelar_agendamento' a.id %}"
+                                   class="btn btn-sm btn-outline-danger rounded-3">
+
+                                    <i class="bi bi-x-circle"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center text-secondary py-5">
+
+                            Nenhum agendamento encontrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

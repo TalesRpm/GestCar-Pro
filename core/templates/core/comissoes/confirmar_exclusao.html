@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h3>Excluir Comissão</h3>
+
+<p>Tem certeza que deseja excluir esta comissão?</p>
+
+<form method="post">
+{% csrf_token %}
+
+<button type="submit" class="btn btn-danger">
+Confirmar Exclusão
+</button>
+
+<a href="{% url 'listar_comissoes' %}" class="btn btn-secondary">
+Cancelar
+</a>
+
+</form>
+
+{% endblock %}

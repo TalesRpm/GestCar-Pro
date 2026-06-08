@@ -1,0 +1,778 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{% block title %}GestCar Pro{% endblock %}</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+
+/* CORES */ 
+
+:root{
+--bg:#f3f4f6;
+--sidebar:#111827;
+--text:#111827;
+--hover:#1f2937;
+--active:#2563eb;
+--brand:#f97316;
+}
+
+body.dark{
+--bg:#0f172a;
+--sidebar:#020617;
+--text:#e5e7eb;
+--hover:#1e293b;
+--active:#3b82f6;
+}
+
+/* BODY */
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:Segoe UI;
+margin:0;
+transition:.3s;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+height:100vh;
+background:linear-gradient(
+180deg,
+#020617 0%,
+#0f172a 100%
+);
+position:fixed;
+padding:25px;
+border-right:1px solid rgba(255,255,255,.05);
+box-shadow:8px 0 30px rgba(0,0,0,.25);
+}
+
+.sidebar a{
+display:flex;
+align-items:center;
+gap:10px;
+padding:14px 16px;
+border-radius:14px;
+color:#cbd5e1;
+text-decoration:none;
+margin-bottom:8px;
+transition:.25s;
+font-weight:500;
+}
+
+.sidebar a:hover{
+background:rgba(249,115,22,.08);
+color:#f97316;
+transform:translateX(3px);
+}
+
+.sidebar a.active{
+background:rgba(249,115,22,.15);
+color:#f97316;
+font-weight:600;
+border-left:4px solid #f97316;
+}
+
+.sidebar i{
+font-size:18px;
+min-width:20px;
+}
+
+/* LOGO */
+
+.logo-box{
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:30px;
+}
+
+.logo-img{
+width:100px;
+border-radius:18px;
+margin-bottom:12px;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+transition:.3s;
+}
+
+.logo-img:hover{
+transform:scale(1.03);
+}
+
+.logo-title{
+color:#fff;
+font-size:22px;
+font-weight:700;
+margin:0;
+line-height:1.2;
+}
+
+.logo-subtitle{
+color:#94a3b8;
+font-size:12px;
+letter-spacing:.5px;
+margin-top:2px;
+}
+
+/* CONTEÚDO */
+
+.main{
+margin-left:260px;
+padding:30px;
+}
+
+/* TOPO */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+padding:18px 24px;
+background:#111827;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.05);
+box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.topbar{
+color:white;
+}
+
+.user-box{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+/* BUSCA */
+
+.search-box{
+position:relative;
+width:360px;
+}
+
+.search-box input{
+width:100%;
+height:48px;
+padding:10px 15px 10px 40px;
+border-radius:14px;
+border:none;
+outline:none;
+background:#1e293b;
+color:white;
+}
+
+.search-box input::placeholder{
+color:#94a3b8;
+}
+
+body.dark .search-box input{
+background:#1e293b;
+color:white;
+}
+
+.search-icon{
+position:absolute;
+left:10px;
+top:50%;
+transform:translateY(-50%);
+color:#64748b;
+}
+
+.search-results{
+position:absolute;
+top:40px;
+width:100%;
+background:white;
+border-radius:8px;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+display:none;
+z-index:999;
+}
+
+body.dark .search-results{
+background:#111827;
+}
+
+/* CARDS DASHBOARD */
+
+.dashboard-card{
+background:#111827 !important;
+border:1px solid rgba(255,255,255,.05);
+border-radius:24px;
+padding:28px;
+color:#fff;
+box-shadow:0 10px 30px rgba(0,0,0,.20);
+transition:.25s;
+cursor:pointer;
+position:relative;
+overflow:hidden;
+min-height:150px;
+}
+
+.dashboard-card h2{
+font-size:42px;
+font-weight:800;
+margin:0;
+}
+
+.dashboard-card small{
+color:#94a3b8;
+font-size:14px;
+}
+
+.dashboard-card i{
+font-size:42px;
+opacity:.9;
+}
+
+.dashboard-card::before{
+content:'';
+position:absolute;
+left:0;
+top:0;
+width:4px;
+height:100%;
+}
+
+/* IDENTIDADE */
+
+.card-clientes::before{
+background:#3b82f6;
+}
+
+.card-veiculos::before{
+background:#06b6d4;
+}
+
+.card-servicos::before{
+background:#8b5cf6;
+}
+
+.card-agendamentos::before{
+background:#f59e0b;
+}
+
+/* HOVER */
+
+.dashboard-card:hover{
+transform:translateY(-5px);
+border-color:rgba(59,130,246,.20);
+box-shadow:0 18px 40px rgba(0,0,0,.28);
+}
+
+/* LOADER */
+
+#loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#020617;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+transition:opacity .3s;
+}
+
+/* BOTÕES */
+
+.menu-btn{
+border-radius:12px;
+padding:15px;
+font-weight:500;
+transition:0.25s;
+}
+
+.menu-btn:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn{
+transition:0.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+}
+
+/* CALENDÁRIO */
+
+#calendar{
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+body.dark #calendar{
+background:#020617;
+}
+
+/* CABEÇALHO */
+
+.fc-toolbar-title{
+font-size:22px;
+font-weight:600;
+}
+
+/* BOTÕES */
+
+.fc-button{
+background:#2563eb !important;
+border:none !important;
+border-radius:8px !important;
+padding:6px 12px !important;
+}
+
+.fc-button:hover{
+background:#1d4ed8 !important;
+}
+
+/* EVENTOS */
+
+.fc-event{
+border:none !important;
+border-radius:8px;
+padding:3px;
+font-size:13px;
+}
+
+.btn-theme{
+border:1px solid var(--text);
+color:var(--text);
+background:transparent;
+}
+
+.btn-theme:hover{
+background:var(--text);
+color:var(--bg);
+}
+
+/* FORMULARIOS */
+
+.form-control,
+.form-select{
+
+background:#0f172a !important;
+border:1px solid rgba(255,255,255,.08) !important;
+color:#fff !important;
+border-radius:14px !important;
+padding:12px 14px !important;
+transition:.25s;
+box-shadow:none !important;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+border-color:#3b82f6 !important;
+
+box-shadow:
+0 0 0 4px rgba(59,130,246,.15) !important;
+
+background:#0f172a !important;
+
+}
+
+.form-label{
+
+margin-bottom:10px;
+font-size:14px;
+
+}
+
+.form-control::placeholder{
+
+color:#64748b;
+
+}
+
+/* TABELAS */
+
+.custom-table{
+
+margin:0;
+
+}
+
+.custom-table thead{
+
+background:#0f172a;
+
+}
+
+.custom-table thead th{
+
+border:none !important;
+padding:18px !important;
+font-size:14px;
+font-weight:600;
+color:#94a3b8 !important;
+text-transform:uppercase;
+letter-spacing:.5px;
+
+}
+
+.custom-table tbody tr{
+
+border-color:rgba(255,255,255,.04) !important;
+transition:.2s;
+
+}
+
+.custom-table tbody tr:hover{
+
+background:rgba(255,255,255,.03);
+
+}
+
+.custom-table tbody td{
+
+padding:18px !important;
+border-color:rgba(255,255,255,.04) !important;
+vertical-align:middle;
+
+}
+
+.card{
+background:#111827 !important;
+border:1px solid rgba(255,255,255,.05) !important;
+border-radius:20px !important;
+box-shadow:0 10px 30px rgba(0,0,0,.15) !important;
+}
+
+.card-body{
+padding:24px !important;
+}
+
+
+.btn-success{
+background:var(--brand) !important;
+border:none !important;
+}
+
+.btn-success:hover{
+background:#ea580c !important;
+}
+
+.btn-primary{
+background:#f97316 !important;
+border:none !important;
+}
+
+.btn-primary:hover{
+background:#ea580c !important;
+}
+
+
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+{% if messages %}
+
+<div class="toast-container position-fixed top-0 end-0 p-4"
+     style="z-index:9999;">
+
+    {% for message in messages %}
+
+    <div class="toast show border-0 rounded-4 mb-3 shadow-lg"
+         style="
+         background:#111827;
+         color:white;
+         min-width:320px;
+         ">
+
+        <div class="d-flex align-items-center p-3">
+
+            <div class="me-3 fs-4">
+
+                {% if message.tags == 'success' %}
+                    ✅
+                {% elif message.tags == 'error' %}
+                    ❌
+                {% else %}
+                    ℹ️
+                {% endif %}
+
+            </div>
+
+            <div class="flex-grow-1">
+
+                {{ message }}
+
+            </div>
+
+            <button type="button"
+                    class="btn-close btn-close-white ms-3"
+                    data-bs-dismiss="toast"></button>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+<div id="loader">
+<div class="spinner-border text-light"></div>
+</div>
+
+
+<div class="sidebar">
+
+<div class="logo-box">
+
+<img src="{% static 'img/logogestcar.png' %}"
+class="logo-img">
+
+<h3 class="logo-title">
+GestCar Pro
+</h3>
+
+<small class="logo-subtitle">
+Sistema de Gestão
+</small>
+
+</div>
+
+<a href="/" class="{% if request.path == '/' %}active{% endif %}">
+<i class="bi bi-speedometer2"></i> Dashboard
+</a>
+
+<a href="/clientes/" class="{% if '/clientes' in request.path %}active{% endif %}">
+<i class="bi bi-people"></i> Clientes
+</a>
+
+<a href="/veiculos/" class="{% if '/veiculos' in request.path %}active{% endif %}">
+<i class="bi bi-car-front"></i> Veículos
+</a>
+
+<a href="/servicos/" class="{% if '/servicos' in request.path %}active{% endif %}">
+<i class="bi bi-tools"></i> Serviços
+</a>
+
+<a href="/agendamentos/" class="{% if '/agendamentos' in request.path %}active{% endif %}">
+<i class="bi bi-calendar-check"></i> Agendamentos
+</a>
+
+<a href="/calendario/" class="{% if '/calendario' in request.path %}active{% endif %}">
+<i class="bi bi-calendar3"></i> Calendário
+</a>
+
+<a href="/comissoes/" class="{% if '/comissoes' in request.path %}active{% endif %}">
+<i class="bi bi-cash-coin"></i> Comissões
+</a>
+
+<a href="{% url 'listar_financeiro' %}"
+class="{% if '/financeiro' in request.path %}active{% endif %}">
+<i class="bi bi-cash-stack"></i>Financeiro
+
+</a>
+
+<hr>
+
+<a href="{% url 'logout' %}">
+<i class="bi bi-box-arrow-right"></i> Sair
+</a>
+
+</div>
+
+
+<div class="main">
+
+<div class="topbar">
+
+<div class="d-flex align-items-center gap-3">
+
+{% if request.path != "/" %}
+<button onclick="history.back()" class="btn btn-outline-light btn-sm">
+<i class="bi bi-arrow-left"></i> Voltar
+</button>
+{% endif %}
+
+<div class="search-box">
+
+<i class="bi bi-search search-icon"></i>
+
+<form action="/busca/" method="get">
+
+<input
+type="text"
+name="q"
+id="buscaGlobal"
+placeholder="Buscar cliente, placa ou telefone..."
+autocomplete="off"
+>
+
+</form>
+
+<div id="resultadoBusca" class="search-results"></div>
+
+</div>
+
+</div>
+
+<div class="user-box">
+
+<button onclick="toggleDarkMode()" class="btn btn-theme btn-sm">
+<i class="bi bi-moon"></i>
+</button>
+
+<i class="bi bi-person-circle"></i>
+{{ request.user.username }}
+
+</div>
+
+</div>
+
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+
+<script>
+
+/* DARK MODE */
+
+function toggleDarkMode(){
+
+document.body.classList.toggle("dark");
+
+localStorage.setItem(
+"darkMode",
+document.body.classList.contains("dark")
+);
+
+}
+
+if(localStorage.getItem("darkMode")==="true"){
+document.body.classList.add("dark");
+}
+
+
+/* LOADER */
+
+window.addEventListener("load",function(){
+
+document.getElementById("loader").style.opacity="0";
+
+setTimeout(function(){
+document.getElementById("loader").style.display="none";
+},300);
+
+});
+
+
+/* BUSCA AJAX */
+
+const campoBusca = document.getElementById("buscaGlobal");
+const resultado = document.getElementById("resultadoBusca");
+
+campoBusca.addEventListener("keyup", function(){
+
+let query = this.value;
+
+if(query.length < 2){
+resultado.style.display = "none";
+return;
+}
+
+fetch(`/busca-ajax/?q=${query}`)
+.then(res => res.json())
+.then(data => {
+
+let html = "";
+
+if(data.clientes.length){
+
+html += "<div class='p-2'><strong>Clientes</strong></div>";
+
+data.clientes.forEach(c=>{
+html += `
+<div class="p-2 border-bottom">
+👤 ${c.nome}<br>
+<small>${c.telefone}</small>
+</div>
+`;
+});
+
+}
+
+if(data.veiculos.length){
+
+html += "<div class='p-2'><strong>Veículos</strong></div>";
+
+data.veiculos.forEach(v=>{
+html += `
+<div class="p-2 border-bottom">
+🚗 ${v.modelo} - ${v.placa}<br>
+<small>${v.cliente}</small>
+</div>
+`;
+});
+
+}
+
+resultado.innerHTML = html;
+resultado.style.display = "block";
+
+});
+
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+
+setTimeout(() => {
+
+document.querySelectorAll('.toast').forEach(toast => {
+
+toast.style.opacity = '0';
+
+toast.style.transform = 'translateX(50px)';
+
+setTimeout(() => {
+
+toast.remove();
+
+}, 300);
+
+});
+
+}, 3000);
+
+</script>
+
+</body>
+</html>

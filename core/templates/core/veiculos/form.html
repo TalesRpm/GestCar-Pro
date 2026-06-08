@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Cadastrar Veículo{% endblock %}
+
+{% block content %}
+
+<div class="card border-0 rounded-4 shadow-sm"
+     style="background:#111827;">
+
+    <div class="card-header border-0 p-4"
+         style="background:#111827;">
+
+        <h4 class="fw-bold text-light mb-0">
+            <i class="bi bi-car-front me-2"></i>
+            Cadastro de Veículo
+        </h4>
+
+    </div>
+
+    <div class="card-body p-4">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-light">
+                        Cliente
+                    </label>
+
+                    {{ form.cliente }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-light">
+                        Marca
+                    </label>
+
+                    {{ form.marca }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-light">
+                        Modelo
+                    </label>
+
+                    {{ form.modelo }}
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label text-light">
+                        Placa
+                    </label>
+
+                    {{ form.placa }}
+
+                </div>
+
+                <div class="col-12">
+
+                    <label class="form-label text-light">
+                        Cor
+                    </label>
+
+                    {{ form.cor }}
+
+                </div>
+
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <div class="d-flex justify-content-between">
+
+                <a href="{% url 'listar_veiculos' %}"
+                   class="btn btn-outline-light">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Voltar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    <i class="bi bi-check-circle"></i>
+                    Salvar Veículo
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,610 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1 text-light">
+            Dashboard
+        </h2>
+
+        <p class="text-secondary mb-0">
+            Painel de gestão automotiva GestCar Pro
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- CARDS -->
+
+<!-- CARDS -->
+
+<div class="row g-4 mb-5">
+
+    <!-- CLIENTES -->
+
+    <div class="col-md-3">
+
+        <a href="/clientes/" class="text-decoration-none">
+
+            <div class="dashboard-card card-clientes">
+
+                <div class="d-flex justify-content-between align-items-center h-100">
+
+                    <div>
+
+                        <small class="opacity-75 text-uppercase">
+                            Clientes
+                        </small>
+
+                        <h2 class="mt-2 fw-bold">
+                            {{ total_clientes }}
+                        </h2>
+
+                        <div class="mt-2 text-secondary small">
+                            Cadastros ativos
+                        </div>
+
+                    </div>
+
+                    <i class="bi bi-people fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <!-- VEÍCULOS -->
+
+    <div class="col-md-3">
+
+        <a href="/veiculos/" class="text-decoration-none">
+
+            <div class="dashboard-card card-veiculos">
+
+                <div class="d-flex justify-content-between align-items-center h-100">
+
+                    <div>
+
+                        <small class="opacity-75 text-uppercase">
+                            Veículos
+                        </small>
+
+                        <h2 class="mt-2 fw-bold">
+                            {{ total_veiculos }}
+                        </h2>
+
+                        <div class="mt-2 text-secondary small">
+                            Veículos cadastrados
+                        </div>
+
+                    </div>
+
+                    <i class="bi bi-car-front fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <!-- SERVIÇOS -->
+
+    <div class="col-md-3">
+
+        <a href="/servicos/" class="text-decoration-none">
+
+            <div class="dashboard-card card-servicos">
+
+                <div class="d-flex justify-content-between align-items-center h-100">
+
+                    <div>
+
+                        <small class="opacity-75 text-uppercase">
+                            Serviços
+                        </small>
+
+                        <h2 class="mt-2 fw-bold">
+                            {{ total_servicos }}
+                        </h2>
+
+                        <div class="mt-2 text-secondary small">
+                            Serviços disponíveis
+                        </div>
+
+                    </div>
+
+                    <i class="bi bi-tools fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <!-- AGENDAMENTOS -->
+
+    <div class="col-md-3">
+
+        <a href="/agendamentos/" class="text-decoration-none">
+
+            <div class="dashboard-card card-agendamentos">
+
+                <div class="d-flex justify-content-between align-items-center h-100">
+
+                    <div>
+
+                        <small class="opacity-75 text-uppercase">
+                            Agendamentos
+                        </small>
+
+                        <h2 class="mt-2 fw-bold">
+                            {{ total_agendamentos }}
+                        </h2>
+
+                        <div class="mt-2 text-secondary small">
+                            Registros do sistema
+                        </div>
+
+                    </div>
+
+                    <i class="bi bi-calendar-check fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- FINANCEIRO -->
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+
+        <div class="dashboard-card"
+        style="border-left:4px solid #22c55e;">
+
+            <div class="card-body p-4 text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="opacity-75">
+
+                            Entradas
+
+                        </small>
+
+                        <h3 class="fw-bold mt-2">
+
+                            R$ {{ entradas|floatformat:2 }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-arrow-down-circle fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="dashboard-card"
+        style="border-left:4px solid #ef4444;">
+
+            <div class="card-body p-4 text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="opacity-75">
+
+                            Saídas
+
+                        </small>
+
+                        <h3 class="fw-bold mt-2">
+
+                            R$ {{ saidas|floatformat:2 }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-circle fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="dashboard-card"
+        style="border-left:4px solid #f97316;">
+
+            <div class="card-body p-4 text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="opacity-75">
+
+                            Saldo Atual
+
+                        </small>
+
+                        <h3 class="fw-bold mt-2">
+
+                            R$ {{ saldo|floatformat:2 }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-cash-stack fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- GRAFICOS -->
+
+<div class="row g-4">
+
+    <!-- STATUS -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 rounded-4 shadow-sm h-100"
+             style="background:#111827;">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold text-light mb-1">
+                    Status dos Agendamentos
+                </h5>
+
+                <small class="text-secondary">
+                    Distribuição atual
+                </small>
+
+                <div style="height:320px;" class="mt-4">
+                    <canvas id="graficoStatus"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MOVIMENTAÇÕES -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 rounded-4 shadow-sm h-100"
+             style="background:#111827;">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h5 class="fw-bold text-light mb-1">
+                            Últimas Movimentações
+                        </h5>
+
+                        <small class="text-secondary">
+                            Financeiro recente
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div style="max-height:320px; overflow-y:auto;">
+
+                    {% for item in movimentacoes %}
+
+                    <div class="p-3 rounded-4 mb-3"
+                    style="
+                    background:#0f172a;
+                    border:1px solid rgba(255,255,255,.05);
+                    transition:.2s;
+                    ">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <div class="fw-bold text-light">
+                                    {{ item.descricao }}
+                                </div>
+
+                                <small class="text-secondary">
+                                    {{ item.data_movimentacao }}
+                                </small>
+
+                            </div>
+
+                            <div class="text-end">
+
+                                {% if item.tipo == 'ENTRADA' %}
+
+<div class="fw-bold text-success">
+    + R$ {{ item.valor|floatformat:2 }}
+</div>
+
+{% elif item.tipo == 'SAIDA' %}
+
+<div class="fw-bold text-danger">
+    - R$ {{ item.valor|floatformat:2 }}
+</div>
+
+{% else %}
+
+<div class="fw-bold text-info">
+    R$ {{ item.valor|floatformat:2 }}
+</div>
+
+{% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="text-center py-5 text-secondary">
+                        Nenhuma movimentação encontrada.
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ÚLTIMOS 7 DIAS -->
+
+<div class="row g-4 mt-1">
+
+    <div class="col-12">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+             style="background:#111827;">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold text-light mb-1">
+                    Últimos 7 Dias
+                </h5>
+
+                <small class="text-secondary">
+                    Evolução de agendamentos
+                </small>
+
+                <div style="height:320px;" class="mt-4">
+                    <canvas id="graficoDias"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const statusLabels = {{ status_labels|safe }};
+const statusTotals = {{ status_totals|safe }};
+
+const diasLabels = {{ dias|safe }};
+const diasTotals = {{ totais_dias|safe }};
+
+
+// =========================
+// GRAFICO STATUS
+// =========================
+
+new Chart(document.getElementById('graficoStatus'), {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: statusLabels,
+
+        datasets: [{
+
+            data: statusTotals,
+
+            backgroundColor: [
+
+                '#facc15',
+                '#dc2626    ',
+                '#16a34a'
+
+            ],
+
+            borderWidth: 0
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: 'bottom',
+
+                labels: {
+
+                    color: '#94a3b8',
+                    padding: 20
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+
+
+// =========================
+// GRAFICO LINHA
+// =========================
+
+new Chart(document.getElementById('graficoDias'), {
+
+    type: 'line',
+
+    data: {
+
+        labels: diasLabels,
+
+        datasets: [{
+
+            label: 'Agendamentos',
+
+            data: diasTotals,
+
+            borderColor: '#3b82f6',
+
+            backgroundColor: 'rgba(59,130,246,0.2)',
+
+            fill: true,
+
+            tension: 0.4
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                labels: {
+
+                    color: '#94a3b8'
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            x: {
+
+                ticks: {
+
+                    color: '#94a3b8'
+
+                },
+
+                grid: {
+
+                    color: 'rgba(255,255,255,0.05)'
+
+                }
+
+            },
+
+            y: {
+
+                ticks: {
+
+                    color: '#94a3b8'
+
+                },
+
+                grid: {
+
+                    color: 'rgba(255,255,255,0.05)'
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

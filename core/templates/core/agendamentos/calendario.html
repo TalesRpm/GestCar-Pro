@@ -1,0 +1,139 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">
+<i class="bi bi-calendar3"></i> Agenda de Agendamentos
+</h2>
+
+<div class="card shadow-sm border-0">
+<div class="card-body">
+
+<div id="calendar"></div>
+
+</div>
+</div>
+
+<style>
+
+/* ESTILO DO CALENDÁRIO */
+
+#calendar{
+max-width:100%;
+margin:auto;
+}
+
+.fc-toolbar-title{
+font-size:22px;
+font-weight:600;
+}
+
+/* BOTÕES */
+
+.fc-button{
+background:#2563eb !important;
+border:none !important;
+border-radius:8px !important;
+padding:6px 12px !important;
+}
+
+.fc-button:hover{
+background:#1d4ed8 !important;
+}
+
+/* EVENTOS */
+
+.fc-event{
+border:none !important;
+border-radius:6px;
+padding:2px;
+font-size:13px;
+}
+
+/* COR DO TEXTO DO CALENDÁRIO */
+
+.fc a{
+color: var(--text);
+text-decoration:none;
+}
+
+.fc-daygrid-day-number{
+color:var(--text) !important;
+}
+
+.fc-toolbar-title{
+color:var(--text);
+}
+
+.fc-event-title{
+color:white !important;
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+var calendarEl = document.getElementById('calendar');
+
+var calendar = new FullCalendar.Calendar(calendarEl, {
+
+initialView: 'dayGridMonth',
+
+locale: 'pt-br',
+
+height: 650,
+
+headerToolbar:{
+left:'prev,next today',
+center:'title',
+right:'dayGridMonth,timeGridWeek'
+},
+
+buttonText:{
+today:'Hoje',
+month:'Mês',
+week:'Semana'
+},
+
+events: '/eventos/',
+
+eventDidMount:function(info){
+
+let status = info.event.extendedProps.status;
+
+if(status === "AGENDADO"){
+info.el.style.backgroundColor = "#2563eb";
+}
+
+if(status === "CONCLUIDO"){
+info.el.style.backgroundColor = "#16a34a";
+}
+
+if(status === "CANCELADO"){
+info.el.style.backgroundColor = "#dc2626";
+}
+
+},
+
+eventClick: function(info) {
+
+let dados = info.event.extendedProps;
+
+alert(
+"Cliente: " + dados.cliente + "\n" +
+"Veículo: " + dados.veiculo + "\n" +
+"Serviço: " + dados.servico + "\n" +
+"Status: " + dados.status
+);
+
+}
+
+});
+
+calendar.render();
+
+});
+</script>
+
+{% endblock %}

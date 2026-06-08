@@ -1,0 +1,155 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Novo Agendamento{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-10">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+             style="background:#111827;">
+
+            <div class="card-body p-4">
+
+                <h3 class="fw-bold text-light mb-1">
+                    Novo Agendamento
+                </h3>
+
+                <p class="text-secondary mb-4">
+                    Cadastre um novo atendimento
+                </p>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Cliente
+                            </label>
+
+                            {{ form.cliente }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Veículo
+                            </label>
+
+                            {{ form.veiculo }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Serviço
+                            </label>
+
+                            {{ form.servico }}
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <label class="form-label text-light">
+                                Data
+                            </label>
+
+                            {{ form.data }}
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <label class="form-label text-light">
+                                Hora
+                            </label>
+
+                            {{ form.hora }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Status
+                            </label>
+
+                            {{ form.status }}
+
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <div class="d-flex gap-2 justify-content-end">
+
+                        <a href="{% url 'listar_agendamentos' %}"
+                           class="btn btn-outline-light">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Voltar
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-success px-4">
+
+                            <i class="bi bi-check-circle"></i>
+                            Salvar Agendamento
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById("cliente").addEventListener("change", function(){
+
+    let clienteId = this.value;
+
+    fetch(`/veiculos-por-cliente/${clienteId}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        let selectVeiculo = document.getElementById("veiculo");
+
+        selectVeiculo.innerHTML = "";
+
+        data.forEach(function(veiculo){
+
+            let option = document.createElement("option");
+
+            option.value = veiculo.id;
+            option.text = veiculo.nome;
+
+            selectVeiculo.appendChild(option);
+
+        });
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

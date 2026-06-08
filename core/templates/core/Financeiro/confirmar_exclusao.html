@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow rounded-4">
+
+            <div class="card-body p-5 text-center">
+
+                <i class="bi bi-trash text-danger"
+                   style="font-size:60px;"></i>
+
+                <h3 class="fw-bold mt-4">
+
+                    Excluir Movimentação
+
+                </h3>
+
+                <p class="text-secondary">
+
+                    Deseja realmente excluir:
+
+                    <strong>
+
+                        {{ movimentacao.descricao }}
+
+                    </strong>?
+
+                </p>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="d-flex gap-2 justify-content-center mt-4">
+
+                        <button class="btn btn-danger px-4">
+
+                            Excluir
+
+                        </button>
+
+                        <a href="{% url 'listar_financeiro' %}"
+                           class="btn btn-secondary px-4">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

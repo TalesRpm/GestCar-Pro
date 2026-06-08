@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Novo Serviço{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-10">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+             style="background:#111827;">
+
+            <div class="card-body p-4">
+
+                <h3 class="fw-bold text-light mb-1">
+                    Novo Serviço
+                </h3>
+
+                <p class="text-secondary mb-4">
+                    Cadastre um novo serviço no sistema
+                </p>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Nome
+                            </label>
+
+                            {{ form.nome }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Valor
+                            </label>
+
+                            {{ form.valor }}
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label text-light">
+                                Duração (minutos)
+                            </label>
+
+                            {{ form.duracao_minutos }}
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label class="form-label text-light">
+                                Descrição
+                            </label>
+
+                            {{ form.descricao }}
+
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <div class="d-flex gap-2 justify-content-end">
+
+                        <a href="{% url 'listar_servicos' %}"
+                           class="btn btn-outline-light">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Voltar
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-success px-4">
+
+                            <i class="bi bi-check-circle"></i>
+                            Salvar Serviço
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

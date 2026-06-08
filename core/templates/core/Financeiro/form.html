@@ -1,0 +1,176 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 rounded-4 shadow-sm"
+     style="
+     background:#111827;
+     border:1px solid rgba(255,255,255,.05);
+     ">
+
+            <div class="card-body p-5">
+
+                <div class="mb-4">
+
+                    <h2 class="fw-bold text-light">
+
+                        Nova Movimentação
+
+                    </h2>
+
+                    <p class="text-secondary">
+
+                        Registre entradas e saídas financeiras do sistema
+
+                    </p>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="row">
+
+                        <!-- TIPO -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold text-light">
+
+                                Tipo
+
+                            </label>
+
+                            {{ form.tipo }}
+
+                        </div>
+
+
+                        <!-- CATEGORIA -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Categoria
+
+                            </label>
+
+                            {{ form.categoria }}
+
+                        </div>
+
+
+                        <!-- DESCRIÇÃO -->
+
+                        <div class="col-12 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Descrição
+
+                            </label>
+
+                            {{ form.descricao }}
+
+                        </div>
+
+
+                        <!-- VALOR -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Valor
+
+                            </label>
+
+                            {{ form.valor }}
+
+                        </div>
+
+
+                        <!-- FORMA PAGAMENTO -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Forma de Pagamento
+
+                            </label>
+
+                            {{ form.forma_pagamento }}
+
+                        </div>
+
+
+                        <!-- DATA -->
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Data
+
+                            </label>
+
+                            {{ form.data_movimentacao }}
+
+                        </div>
+
+
+                        <!-- OBSERVAÇÕES -->
+
+                        <div class="col-12 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Observações
+
+                            </label>
+
+                            {{ form.observacoes }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="d-flex gap-3 mt-5">
+
+                        <button class="btn btn-primary px-4 py-2 rounded-3">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Salvar Movimentação
+
+                        </button>
+
+                        <a href="{% url 'listar_financeiro' %}"
+                           class="btn btn-outline-light px-4 py-2 rounded-3">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
