@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_nqmmlv@d7d(wq(vt+w6c__k-kjr7&=297h5indod+*s3vg6i3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'gestcar-pro-production.up.railway.app',
