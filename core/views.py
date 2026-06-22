@@ -1374,7 +1374,6 @@ def gerar_pdf_financeiro(request):
     return response
 
 @login_required
-@login_required
 def editar_financeiro(request, id):
 
     movimentacao = get_object_or_404(
