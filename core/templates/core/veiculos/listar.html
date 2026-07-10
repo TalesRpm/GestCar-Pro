@@ -72,6 +72,10 @@
                             Cor
                         </th>
 
+                        <th class="text-end">
+                            Ações
+                        </th>
+
                     </tr>
 
                 </thead>
@@ -120,13 +124,35 @@
 
                         </td>
 
+                        <td class="text-end">
+
+                        <div class="d-flex gap-2 justify-content-end">
+
+                        <a href="{% url 'editar_veiculo' veiculo.id %}"
+                        class="btn btn-sm btn-outline-primary rounded-3">
+
+                        <i class="bi bi-pencil"></i>
+
+                    </a>
+
+                        <a href="{% url 'excluir_veiculo' veiculo.id %}"
+                        class="btn btn-sm btn-outline-danger rounded-3">
+
+                        <i class="bi bi-trash"></i>
+
+                    </a>
+
+                    </div>
+
+                    </td>
+
                     </tr>
 
                     {% empty %}
 
                     <tr>
 
-                        <td colspan="5"
+                        <td colspan="6"
                             class="text-center text-secondary py-5">
 
                             Nenhum veículo encontrado.

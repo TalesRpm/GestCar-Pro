@@ -697,55 +697,73 @@ document.getElementById("loader").style.display="none";
 const campoBusca = document.getElementById("buscaGlobal");
 const resultado = document.getElementById("resultadoBusca");
 
-campoBusca.addEventListener("keyup", function(){
+campoBusca.addEventListener("keyup", function () {
 
-let query = this.value;
+    const query = this.value;
 
-if(query.length < 2){
-resultado.style.display = "none";
-return;
-}
+    if (query.length < 2) {
+        resultado.style.display = "none";
+        return;
+    }
 
-fetch(`/busca-ajax/?q=${query}`)
-.then(res => res.json())
-.then(data => {
+    fetch(`/busca-ajax/?q=${query}`)
+        .then(res => res.json())
+        .then(data => {
 
-let html = "";
+            let html = "";
 
-if(data.clientes.length){
+            if (data.clientes.length) {
 
-html += "<div class='p-2'><strong>Clientes</strong></div>";
+                html += "<div class='p-2'><strong>Clientes</strong></div>";
 
-data.clientes.forEach(c=>{
-html += `
-<div class="p-2 border-bottom">
+                data.clientes.forEach(c => {
+
+                    html += `
+<a href="/clientes/editar/${c.id}/" class="text-decoration-none text-light">
+
+<div class="p-2 border-bottom resultado-item">
+
 👤 ${c.nome}<br>
-<small>${c.telefone}</small>
+
+<small class="text-secondary">${c.telefone}</small>
+
 </div>
+
+</a>
 `;
-});
 
-}
+                });
 
-if(data.veiculos.length){
+            }
 
-html += "<div class='p-2'><strong>Veículos</strong></div>";
+            if (data.veiculos.length) {
 
-data.veiculos.forEach(v=>{
-html += `
-<div class="p-2 border-bottom">
+                html += "<div class='p-2'><strong>Veículos</strong></div>";
+
+                data.veiculos.forEach(v => {
+
+                    html += `
+<a href="/veiculos/editar/${v.id}/" class="text-decoration-none text-light">
+
+<div class="p-2 border-bottom resultado-item">
+
 🚗 ${v.modelo} - ${v.placa}<br>
-<small>${v.cliente}</small>
+
+<small class="text-secondary">${v.cliente}</small>
+
 </div>
+
+</a>
 `;
-});
 
-}
+                });
 
-resultado.innerHTML = html;
-resultado.style.display = "block";
+            }
 
-});
+            resultado.innerHTML = html;
+            resultado.style.display = "block";
+
+        });
 
 });
 

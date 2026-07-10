@@ -9,13 +9,12 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from datetime import datetime
-from django.db.models import Count, Sum
 from django.contrib import messages
 from django.contrib.auth import logout
-
 from .models import Cliente, Veiculo, Servico, Agendamento, Comissao, Financeiro
 from .forms import ClienteForm, VeiculoForm, ServicoForm, AgendamentoForm, ComissaoForm, FinanceiroForm
-
+from django.db.models import Sum
+from .relatorios import gerar_relatorio_financeiro
 
 # =============================
 # DASHBOARD
@@ -264,6 +263,70 @@ def cadastrar_veiculo(request):
             'form': form
         }
     )
+    
+@login_required
+def editar_veiculo(request, id):
+
+    veiculo = get_object_or_404(
+        Veiculo,
+        id=id
+    )
+
+    form = VeiculoForm(
+        request.POST or None,
+        instance=veiculo
+    )
+
+    if form.is_valid():
+
+        form.save()
+
+        messages.success(
+            request,
+            'Veículo atualizado com sucesso!'
+        )
+
+        return redirect(
+            'listar_veiculos'
+        )
+
+    return render(
+        request,
+        'core/veiculos/form.html',
+        {
+            'form': form
+        }
+    )
+
+
+@login_required
+def excluir_veiculo(request, id):
+
+    veiculo = get_object_or_404(
+        Veiculo,
+        id=id
+    )
+
+    if request.method == 'POST':
+
+        veiculo.delete()
+
+        messages.success(
+            request,
+            'Veículo excluído com sucesso!'
+        )
+
+        return redirect(
+            'listar_veiculos'
+        )
+
+    return render(
+        request,
+        'core/veiculos/confirmar_exclusao.html',
+        {
+            'veiculo': veiculo
+        }
+    )
 
 
 # =============================
@@ -363,22 +426,36 @@ def cadastrar_agendamento(request):
 @login_required
 def editar_agendamento(request, id):
 
-    agendamento = get_object_or_404(Agendamento, id=id)
+    agendamento = get_object_or_404(
+        Agendamento,
+        id=id
+    )
 
-    form = AgendamentoForm(request.POST or None, instance=agendamento)
+    form = AgendamentoForm(
+        request.POST or None,
+        instance=agendamento
+    )
 
     if form.is_valid():
 
-     form.save()
+        form.save()
 
-    messages.success(
+        messages.success(
+            request,
+            'Agendamento atualizado com sucesso!'
+        )
+
+        return redirect(
+            'listar_agendamentos'
+        )
+
+    return render(
         request,
-        'Agendamento atualizado com sucesso!'
+        'core/agendamentos/form.html',
+        {
+            'form': form
+        }
     )
-
-    return redirect('listar_agendamentos')
-
-    return render(request, 'core/agendamentos/form.html', {'form': form})
 
 
 @login_required
@@ -457,23 +534,36 @@ def cadastrar_servico(request):
 @login_required
 def editar_servico(request, id):
 
-    servico = get_object_or_404(Servico, id=id)
+    servico = get_object_or_404(
+        Servico,
+        id=id
+    )
 
-    form = ServicoForm(request.POST or None, instance=servico)
+    form = ServicoForm(
+        request.POST or None,
+        instance=servico
+    )
 
     if form.is_valid():
 
-     form.save()
+        form.save()
 
-    messages.success(
+        messages.success(
+            request,
+            'Serviço atualizado com sucesso!'
+        )
+
+        return redirect(
+            'listar_servicos'
+        )
+
+    return render(
         request,
-        'Serviço atualizado com sucesso!'
+        'core/servicos/form.html',
+        {
+            'form': form
+        }
     )
-
-    return redirect('listar_servicos')
-
-    return render(request, 'core/servicos/form.html', {'form': form})
-
 
 @login_required
 def excluir_servico(request, id):
@@ -686,23 +776,77 @@ def busca_ajax(request):
 
         clientes = [
             {
+                "id": c.id,
                 "nome": c.nome,
                 "telefone": c.telefone
-            } for c in clientes_qs
+            }
+            for c in clientes_qs
         ]
 
         veiculos = [
             {
+                "id": v.id,
                 "placa": v.placa,
                 "modelo": v.modelo,
                 "cliente": v.cliente.nome
-            } for v in veiculos_qs
+            }
+            for v in veiculos_qs
         ]
 
     return JsonResponse({
         "clientes": clientes,
         "veiculos": veiculos
     })
+    
+@login_required
+def editar_comissao(request, id):
+
+    comissao = get_object_or_404(
+        Comissao,
+        id=id
+    )
+
+    form = ComissaoForm(
+        request.POST or None,
+        instance=comissao
+    )
+
+    if form.is_valid():
+
+        comissao = form.save(commit=False)
+
+        # Recalcula automaticamente apenas se os campos estiverem vazios
+        if not comissao.valor_servico or not comissao.comissao:
+
+            valor, valor_comissao = calcular_valores(
+                comissao.categoria,
+                comissao.servico
+            )
+
+            if not comissao.valor_servico:
+                comissao.valor_servico = valor
+
+            if not comissao.comissao:
+                comissao.comissao = valor_comissao
+
+        comissao.save()
+
+        messages.success(
+            request,
+            'Comissão atualizada com sucesso!'
+        )
+
+        return redirect(
+            'listar_comissoes'
+        )
+
+    return render(
+        request,
+        'core/comissoes/form.html',
+        {
+            'form': form
+        }
+    )
 
 def excluir_comissao(request, id):
 
@@ -896,482 +1040,7 @@ def criar_financeiro(request):
 
 @login_required
 def gerar_pdf_financeiro(request):
-
-    # =========================
-    # FILTROS
-    # =========================
-
-    financeiro = Financeiro.objects.all()
-
-    tipo = request.GET.get('tipo')
-    categoria = request.GET.get('categoria')
-    busca = request.GET.get('busca')
-    forma_pagamento = request.GET.get('forma_pagamento')
-    data_inicio = request.GET.get('data_inicio')
-    data_fim = request.GET.get('data_fim')
-
-
-    if tipo:
-
-        financeiro = financeiro.filter(
-            tipo=tipo
-        )
-
-
-    if categoria:
-
-        financeiro = financeiro.filter(
-            categoria__icontains=categoria
-        )
-
-
-    if busca:
-
-        financeiro = financeiro.filter(
-            descricao__icontains=busca
-        )
-
-
-    if data_inicio:
-
-        financeiro = financeiro.filter(
-            data_movimentacao__gte=data_inicio
-        )
-
-
-    if data_fim:
-
-        financeiro = financeiro.filter(
-            data_movimentacao__lte=data_fim
-        )
-
-    if forma_pagamento:
-
-        financeiro = financeiro.filter(
-            forma_pagamento=forma_pagamento
-    )
-
-
-
-    # =========================
-    # RESPONSE PDF
-    # =========================
-
-    response = HttpResponse(
-        content_type='application/pdf'
-    )
-
-    response[
-        'Content-Disposition'
-    ] = 'attachment; filename="financeiro_gestcar.pdf"'
-
-
-    pdf = canvas.Canvas(
-        response,
-        pagesize=letter
-    )
-
-    largura, altura = letter
-
-
-    # =========================
-    # FUNDO
-    # =========================
-
-    pdf.setFillColorRGB(0.97, 0.97, 0.97)
-
-    pdf.rect(
-        0,
-        0,
-        largura,
-        altura,
-        fill=1
-    )
-
-
-    # =========================
-    # CABECALHO
-    # =========================
-
-    pdf.setFillColorRGB(0.05, 0.09, 0.16)
-
-    pdf.rect(
-        0,
-        altura - 100,
-        largura,
-        100,
-        fill=1
-    )
-
-    pdf.setFillColorRGB(1, 1, 1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        26
-    )
-
-    pdf.drawString(
-        50,
-        altura - 55,
-        "GestCar Pro"
-    )
-
-    pdf.setFont(
-        "Helvetica",
-        13
-    )
-
-    pdf.drawString(
-        50,
-        altura - 78,
-        "Relatório Financeiro"
-    )
-
-
-    # DATA GERACAO
-
-    data_geracao = datetime.now().strftime(
-        "%d/%m/%Y %H:%M"
-    )
-
-    pdf.setFont(
-        "Helvetica",
-        10
-    )
-
-    pdf.drawRightString(
-        largura - 50,
-        altura - 60,
-        f"Gerado em: {data_geracao}"
-    )
-
-
-    # =========================
-    # DADOS
-    # =========================
-
-    entradas = financeiro.filter(
-        tipo='ENTRADA'
-    ).aggregate(
-        Sum('valor')
-    )['valor__sum'] or 0
-
-
-    saidas = financeiro.filter(
-        tipo='SAIDA'
-    ).aggregate(
-        Sum('valor')
-    )['valor__sum'] or 0
-
-
-    saldo = entradas - saidas
-
-
-    # =========================
-    # TITULO RESUMO
-    # =========================
-
-    y = altura - 150
-
-    pdf.setFillColorRGB(0.1, 0.1, 0.1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        16
-    )
-
-    pdf.drawString(
-        50,
-        y,
-        "Resumo Financeiro"
-    )
-
-
-    # =========================
-    # CARDS
-    # =========================
-
-    y -= 50
-
-
-    # ENTRADAS
-
-    pdf.setFillColorRGB(0.1, 0.65, 0.3)
-
-    pdf.roundRect(
-        50,
-        y,
-        150,
-        70,
-        10,
-        fill=1
-    )
-
-    pdf.setFillColorRGB(1, 1, 1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        12
-    )
-
-    pdf.drawString(
-        65,
-        y + 45,
-        "Entradas"
-    )
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        18
-    )
-
-    pdf.drawString(
-        65,
-        y + 20,
-        f"R$ {entradas:.2f}"
-    )
-
-
-    # SAIDAS
-
-    pdf.setFillColorRGB(0.85, 0.15, 0.2)
-
-    pdf.roundRect(
-        230,
-        y,
-        150,
-        70,
-        10,
-        fill=1
-    )
-
-    pdf.setFillColorRGB(1, 1, 1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        12
-    )
-
-    pdf.drawString(
-        245,
-        y + 45,
-        "Saídas"
-    )
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        18
-    )
-
-    pdf.drawString(
-        245,
-        y + 20,
-        f"R$ {saidas:.2f}"
-    )
-
-
-    # SALDO
-
-    pdf.setFillColorRGB(0.35, 0.2, 0.9)
-
-    pdf.roundRect(
-        410,
-        y,
-        150,
-        70,
-        10,
-        fill=1
-    )
-
-    pdf.setFillColorRGB(1, 1, 1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        12
-    )
-
-    pdf.drawString(
-        425,
-        y + 45,
-        "Saldo Atual"
-    )
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        18
-    )
-
-    pdf.drawString(
-        425,
-        y + 20,
-        f"R$ {saldo:.2f}"
-    )
-
-
-    # =========================
-    # TITULO TABELA
-    # =========================
-
-    y -= 100
-
-    pdf.setFillColorRGB(0.1, 0.1, 0.1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        16
-    )
-
-    pdf.drawString(
-        50,
-        y,
-        "Movimentações Financeiras"
-    )
-
-
-    # =========================
-    # CABECALHO TABELA
-    # =========================
-
-    y -= 30
-
-    pdf.setFillColorRGB(0.05, 0.09, 0.16)
-
-    pdf.roundRect(
-        50,
-        y,
-        510,
-        25,
-        5,
-        fill=1
-    )
-
-    pdf.setFillColorRGB(1, 1, 1)
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        11
-    )
-
-    pdf.drawString(60, y + 8, "Data")
-    pdf.drawString(150, y + 8, "Tipo")
-    pdf.drawString(240, y + 8, "Descrição")
-    pdf.drawString(470, y + 8, "Valor")
-
-
-    # =========================
-    # MOVIMENTACOES
-    # =========================
-
-    movimentacoes = financeiro.order_by(
-        '-data_movimentacao'
-    )
-
-    y -= 30
-
-    pdf.setFont(
-        "Helvetica",
-        10
-    )
-
-    linha = 0
-
-    for item in movimentacoes:
-
-        if y < 60:
-
-            pdf.showPage()
-
-            y = altura - 60
-
-
-        # ZEBRADO
-
-        if linha % 2 == 0:
-
-            pdf.setFillColorRGB(0.94, 0.94, 0.94)
-
-            pdf.rect(
-                50,
-                y - 5,
-                510,
-                22,
-                fill=1,
-                stroke=0
-            )
-
-
-        pdf.setFillColorRGB(0, 0, 0)
-
-        pdf.drawString(
-            60,
-            y,
-            item.data_movimentacao.strftime(
-                "%d/%m/%Y"
-            )
-        )
-
-        pdf.drawString(
-            150,
-            y,
-            item.tipo
-        )
-
-        pdf.drawString(
-            240,
-            y,
-            item.descricao[:28]
-        )
-
-
-        if item.tipo == 'ENTRADA':
-
-            pdf.setFillColorRGB(0, 0.6, 0)
-
-        else:
-
-            pdf.setFillColorRGB(0.8, 0, 0)
-
-
-        pdf.drawRightString(
-            540,
-            y,
-            f"R$ {item.valor:.2f}"
-        )
-
-        y -= 24
-
-        linha += 1
-
-
-    # =========================
-    # RODAPE
-    # =========================
-
-    pdf.setStrokeColorRGB(0.8, 0.8, 0.8)
-
-    pdf.line(
-        50,
-        40,
-        560,
-        40
-    )
-
-    pdf.setFillColorRGB(0.4, 0.4, 0.4)
-
-    pdf.setFont(
-        "Helvetica",
-        9
-    )
-
-    pdf.drawString(
-        50,
-        25,
-        "Relatório gerado automaticamente pelo sistema GestCar Pro"
-    )
-
-    pdf.save()
-
-    return response
+    return gerar_relatorio_financeiro(request)
 
 @login_required
 def editar_financeiro(request, id):
@@ -1395,9 +1064,7 @@ def editar_financeiro(request, id):
             'Movimentação atualizada com sucesso!'
         )
 
-        return redirect(
-            'listar_financeiro'
-        )
+        return redirect('listar_financeiro')
 
     return render(
         request,
@@ -1406,9 +1073,7 @@ def editar_financeiro(request, id):
             'form': form
         }
     )
-
-
-
+    
 @login_required
 def excluir_financeiro(request, id):
 

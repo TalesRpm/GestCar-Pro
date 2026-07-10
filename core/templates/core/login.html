@@ -47,6 +47,30 @@
 
         }
 
+        @keyframes fadeLogin{
+
+        from{
+
+        opacity:0;
+        transform:translateY(25px);
+
+        }
+
+        to{
+
+        opacity:1;
+        transform:translateY(0);
+
+        }
+
+        }
+
+        .login-card{
+
+        animation:fadeLogin .6s ease;
+
+        }
+
         .logo-icon{
 
             width:80px;
@@ -169,6 +193,22 @@
 
         }
 
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active{
+
+    -webkit-box-shadow:0 0 0 1000px #0f172a inset !important;
+
+    -webkit-text-fill-color:white !important;
+
+    caret-color:white;
+
+} 
+
+
+
+
     </style>
 
 </head>
@@ -179,7 +219,7 @@
 
     <div class="text-center mb-4">
     <img src="{% static 'img/logogestcar.png' %}"
-    style="width:120px;">
+    style="width:180px;">
     </div>
 
     <div class="title">
@@ -190,7 +230,9 @@
         Gestão Automotiva
     </div>
 
-    <form method="post">
+    <form
+    method="post"
+    onsubmit="loadingLogin()">
 
         {% csrf_token %}
 
@@ -211,7 +253,8 @@
                     name="username"
                     class="form-control"
                     placeholder="Digite seu usuário"
-                    required>
+                    required
+                    autofocus>
 
             </div>
 
@@ -219,35 +262,54 @@
 
         <div class="mb-4">
 
-            <label class="form-label">
-                Senha
-            </label>
+    <label class="form-label">
 
-            <div class="input-group">
+        Senha
 
-                <span class="input-group-text">
-                    <i class="bi bi-lock"></i>
-                </span>
+    </label>
 
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Digite sua senha"
-                    required>
+    <div class="input-group">
 
-            </div>
+        <span class="input-group-text">
 
-        </div>
+            <i class="bi bi-lock"></i>
+
+        </span>
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Digite sua senha"
+            required>
 
         <button
-            type="submit"
-            class="btn btn-login w-100">
+            class="input-group-text"
+            type="button"
+            onclick="mostrarSenha()"
+            style="cursor:pointer;">
 
-            <i class="bi bi-box-arrow-in-right"></i>
-            Entrar
+            <i
+                id="iconeSenha"
+                class="bi bi-eye"></i>
 
         </button>
+
+    </div>
+
+</div>
+
+        <button
+        id="btnLogin"
+        type="submit"
+        class="btn btn-login w-100">
+
+        <i class="bi bi-box-arrow-in-right me-2"></i>
+
+        Entrar
+
+    </button>
 
         {% if form.errors %}
 
@@ -269,5 +331,42 @@
 
 </div>
 
+    <script>
+
+function mostrarSenha(){
+
+    const senha = document.getElementById("password");
+    const icone = document.getElementById("iconeSenha");
+
+    if(senha.type==="password"){
+
+        senha.type="text";
+        icone.className="bi bi-eye-slash";
+
+    }else{
+
+        senha.type="password";
+        icone.className="bi bi-eye";
+
+    }
+
+}
+
+function loadingLogin(){
+
+    const botao = document.getElementById("btnLogin");
+
+    botao.disabled = true;
+
+    botao.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Entrando...
+    `;
+
+}
+
+</script>
+
 </body>
+
 </html>

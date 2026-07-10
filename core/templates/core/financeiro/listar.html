@@ -33,108 +33,129 @@
 <!-- FILTROS -->
 
 <div class="card border-0 rounded-4 shadow-sm mt-4 mb-4"
-     style="
-     background:#111827;
-     border:1px solid rgba(255,255,255,.05);
-     ">
+    style="background:#111827; border:1px solid rgba(255,255,255,.05);">
 
-    <div class="card-body p-3">
+    <div class="card-body p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h5 class="fw-bold text-light mb-1">
+                    <i class="bi bi-funnel-fill me-2 text-warning"></i>
+                    Filtros Financeiros
+                </h5>
+
+                <small class="text-secondary">
+                    Localize movimentações rapidamente
+                </small>
+
+            </div>
+
+        </div>
 
         <form method="GET">
 
-            <div class="d-flex flex-wrap gap-2">
+            <div class="row g-3">
 
-                <input
-                    type="text"
-                    name="busca"
-                    value="{{ request.GET.busca }}"
-                    class="form-control"
-                    placeholder="Descrição..."
-                    style="width:220px;"
-                >
+                <div class="col-lg-3">
 
-                <input
-                    type="text"
-                    name="forma_pagamento"
-                    value="{{ request.GET.forma_pagamento }}"
-                    class="form-control"
-                    placeholder="Pagamento"
-                    style="width:180px;"
-                >
+                    <input
+                        type="text"
+                        name="busca"
+                        value="{{ request.GET.busca }}"
+                        class="form-control"
+                        placeholder="🔎 Descrição">
 
-                <select
-                    name="tipo"
-                    class="form-select"
-                    style="width:160px;"
-                >
+                </div>
 
-                    <option value="">
-                        Tipo
-                    </option>
+                <div class="col-lg-2">
 
-                    <option value="ENTRADA"
-                    {% if request.GET.tipo == 'ENTRADA' %}
-                    selected
-                    {% endif %}>
+                    <input
+                        type="text"
+                        name="categoria"
+                        value="{{ request.GET.categoria }}"
+                        class="form-control"
+                        placeholder="🏷 Categoria">
+
+                </div>
+
+                <div class="col-lg-2">
+
+                    <select
+                        name="tipo"
+                        class="form-select">
+
+                        <option value="">Tipo</option>
+
+                        <option value="ENTRADA"
+                        {% if request.GET.tipo == 'ENTRADA' %}selected{% endif %}>
                         Entrada
-                    </option>
+                        </option>
 
-                    <option value="SAIDA"
-                    {% if request.GET.tipo == 'SAIDA' %}
-                    selected
-                    {% endif %}>
+                        <option value="SAIDA"
+                        {% if request.GET.tipo == 'SAIDA' %}selected{% endif %}>
                         Saída
-                    </option>
+                        </option>
 
-                    <option value="NEUTRO"
-                    {% if request.GET.tipo == 'NEUTRO' %}
-                    selected
-                    {% endif %}>
+                        <option value="NEUTRO"
+                        {% if request.GET.tipo == 'NEUTRO' %}selected{% endif %}>
                         Neutro
-                    </option>
+                        </option>
 
-                </select>
+                    </select>
 
-                <input
-                    type="text"
-                    name="categoria"
-                    value="{{ request.GET.categoria }}"
-                    class="form-control"
-                    placeholder="Categoria"
-                    style="width:180px;"
-                >
+                </div>
 
-                <input
-                    type="date"
-                    name="data_inicio"
-                    value="{{ request.GET.data_inicio }}"
-                    class="form-control"
-                    style="width:170px;"
-                >
+                <div class="col-lg-2">
 
-                <input
-                    type="date"
-                    name="data_fim"
-                    value="{{ request.GET.data_fim }}"
-                    class="form-control"
-                    style="width:170px;"
-                >
+                    <input
+                        type="text"
+                        name="forma_pagamento"
+                        value="{{ request.GET.forma_pagamento }}"
+                        class="form-control"
+                        placeholder="💳 Pagamento">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary px-3"
-                >
+                </div>
 
-                    <i class="bi bi-search"></i>
+                <div class="col-lg-1">
 
-                </button>
+                    <input
+                        type="date"
+                        name="data_inicio"
+                        value="{{ request.GET.data_inicio }}"
+                        class="form-control">
 
-                <a href="{% url 'listar_financeiro' %}"
-                   class="btn btn-outline-light px-3">
+                </div>
 
-                    <i class="bi bi-x-lg"></i>
+                <div class="col-lg-1">
 
-                </a>
+                    <input
+                        type="date"
+                        name="data_fim"
+                        value="{{ request.GET.data_fim }}"
+                        class="form-control">
+
+                </div>
+
+                <div class="col-lg-1 d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary flex-fill">
+
+                        <i class="bi bi-search"></i>
+
+                    </button>
+
+                    <a href="{% url 'listar_financeiro' %}"
+                    class="btn btn-outline-light">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                    </a>
+
+                </div>
 
             </div>
 

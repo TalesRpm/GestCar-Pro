@@ -17,6 +17,8 @@ urlpatterns = [
     # VEICULOS
     path('veiculos/', views.listar_veiculos, name='listar_veiculos'),
     path('veiculos/novo/', views.cadastrar_veiculo, name='cadastrar_veiculo'),
+    path('veiculos/editar/<int:id>/', views.editar_veiculo, name='editar_veiculo'),
+    path('veiculos/excluir/<int:id>/', views.excluir_veiculo, name='excluir_veiculo'),
 
     # SERVICOS
     path('servicos/', views.listar_servicos, name='listar_servicos'),
@@ -48,12 +50,8 @@ urlpatterns = [
     # COMISSOES
     path('comissoes/', views.listar_comissoes, name='listar_comissoes'),
     path('comissoes/nova/', views.cadastrar_comissao, name='cadastrar_comissao'),
-
-    path(
-        'comissoes/excluir/<int:id>/',
-        views.excluir_comissao,
-        name='excluir_comissao'
-    ),
+    path('comissoes/editar/<int:id>/', views.editar_comissao, name='editar_comissao'),
+    path('comissoes/excluir/<int:id>/', views.excluir_comissao, name='excluir_comissao'),
 
     # FINANCEIRO
     path(

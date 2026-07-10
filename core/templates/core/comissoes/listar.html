@@ -4,80 +4,258 @@
 
 {% block content %}
 
-<h2 class="mb-4">Controle de Comissões</h2>
+<div class="container-fluid">
 
-<a href="{% url 'cadastrar_comissao' %}" class="btn btn-success mb-3">
-Nova Comissão
-</a>
+    <!-- TOPO -->
 
-<div class="row mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="col-md-4">
-<div class="dashboard-card card-servicos">
-<h6>💰 Comissão hoje</h6>
-<h3>R$ {{ comissao_hoje|floatformat:2 }}</h3>
+        <div>
+
+            <h2 class="fw-bold text-light mb-1">
+                Comissões
+            </h2>
+
+            <p class="text-secondary mb-0">
+                Gerenciamento das comissões cadastradas
+            </p>
+
+        </div>
+
+        <a href="{% url 'cadastrar_comissao' %}"
+           class="btn btn-primary px-4 py-2 rounded-3">
+
+            <i class="bi bi-plus-circle me-2"></i>
+
+            Nova Comissão
+
+        </a>
+
+    </div>
+
+
+    <!-- CARDS -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 rounded-4 shadow-sm h-100"
+                 style="background:#111827;border:1px solid rgba(255,255,255,.05);">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary mb-3">
+
+                        💰 Comissão hoje
+
+                    </h6>
+
+                    <h2 class="fw-bold text-light">
+
+                        R$ {{ comissao_hoje|floatformat:2 }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 rounded-4 shadow-sm h-100"
+                 style="background:#111827;border:1px solid rgba(255,255,255,.05);">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary mb-3">
+
+                        📅 Comissão do mês
+
+                    </h6>
+
+                    <h2 class="fw-bold text-light">
+
+                        R$ {{ comissao_mes|floatformat:2 }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 rounded-4 shadow-sm h-100"
+                 style="background:#111827;border:1px solid rgba(255,255,255,.05);">
+
+                <div class="card-body">
+
+                    <h6 class="text-secondary mb-3">
+
+                        🚗 Serviços realizados
+
+                    </h6>
+
+                    <h2 class="fw-bold text-light">
+
+                        {{ total_servicos }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABELA -->
+
+    <div class="card border-0 rounded-4 shadow-sm"
+         style="background:#111827;border:1px solid rgba(255,255,255,.05);">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-dark align-middle mb-0 custom-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Cliente</th>
+
+                            <th>Telefone</th>
+
+                            <th>Carro</th>
+
+                            <th>Serviço</th>
+
+                            <th>Valor</th>
+
+                            <th>Comissão</th>
+
+                            <th>Data</th>
+
+                            <th class="text-end">
+
+                                Ações
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for c in comissoes %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="fw-semibold text-light">
+
+                                    {{ c.cliente_nome }}
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                {{ c.telefone }}
+
+                            </td>
+
+                            <td>
+
+                                {{ c.modelo_carro }} - {{ c.placa }}
+
+                            </td>
+
+                            <td>
+
+                                {{ c.servico }}
+
+                            </td>
+
+                            <td class="text-success fw-semibold">
+
+                                R$ {{ c.valor_servico }}
+
+                            </td>
+
+                            <td class="text-info fw-semibold">
+
+                                R$ {{ c.comissao }}
+
+                            </td>
+
+                            <td>
+
+                                {{ c.data }}
+
+                            </td>
+
+                            <td class="text-end">
+
+                                <div class="d-flex gap-2 justify-content-end">
+
+                                <a href="{% url 'editar_comissao' c.id %}"
+                                class="btn btn-sm btn-outline-primary rounded-3">
+
+                                <i class="bi bi-pencil"></i>
+
+                                </a>
+
+                                <a href="{% url 'excluir_comissao' c.id %}"
+                                class="btn btn-sm btn-outline-danger rounded-3">
+
+                                <i class="bi bi-trash"></i>
+
+                                </a>
+
+                            </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="8"
+                                class="text-center text-secondary py-5">
+
+                                Nenhuma comissão cadastrada.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-</div>
-
-<div class="col-md-4">
-<div class="dashboard-card card-veiculos">
-<h6>📅 Comissão do mês</h6>
-<h3>R$ {{ comissao_mes|floatformat:2 }}</h3>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="dashboard-card card-clientes">
-<h6>🚗 Serviços realizados</h6>
-<h3>{{ total_servicos }}</h3>
-</div>
-</div>
-
-</div>
-
-<table class="table table-striped table-hover align-middle">
-
-<thead>
-<tr>
-<th>Cliente</th>
-<th>Telefone</th>
-<th>Carro</th>
-<th>Serviço</th>
-<th>Valor</th>
-<th>Comissão</th>
-<th>Data</th>
-<th>Ações</th>
-</tr>
-</thead>
-
-<tbody>
-
-{% for c in comissoes %}
-
-<tr>
-<td>{{ c.cliente_nome }}</td>
-<td>{{ c.telefone }}</td>
-<td>{{ c.modelo_carro }} - {{ c.placa }}</td>
-<td>{{ c.servico }}</td>
-<td>R$ {{ c.valor_servico }}</td>
-<td>R$ {{ c.comissao }}</td>
-<td>{{ c.data }}</td>
-
-<td>
-
-<a href="{% url 'excluir_comissao' c.id %}" 
-class="btn btn-sm btn-danger">
-<i class="bi bi-trash"></i>
-</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
 
 {% endblock %}
